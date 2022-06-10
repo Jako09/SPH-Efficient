@@ -2,6 +2,122 @@
 
 using namespace std;
 
+void printGNU_Field_HO(string dataname1);
+void printGNU_Energy_HO(string dataname2);
+void printGNU_it_HO(string dataname3);
+void printGNU_S_HO(string datanamet[]);
+
+void printGNU_Field_HO(int search, string dataname1){
+
+}
+
+void printGNU_Energy_HO(int search, string dataname2, string kind){
+	ofstream file;
+
+	if(kind=="EPS"){
+		file.open("Energy_HO_eps.gnu");
+		file << "set term postscript eps enhanced color" << '\n';
+		if(search==1){
+			file << "set out 'HO_S_E.eps'" << '\n';
+		}
+		if(search==2){
+			file << "set out 'HO_Eff_E.eps'" << '\n';
+		}
+	}
+	if(kind=="PNG"){
+		file.open("Energy_HO_png.gnu");
+		file << "set terminal png size 1000,700" << '\n';
+		if(search==1){
+			file << "set out 'HO_S_E.png'" << '\n';
+		}
+		if(search==2){
+			file << "set out 'HO_Eff_E.png'" << '\n';
+		}
+	}
+	file << "set grid" << '\n';
+	file << "set title 'Energy Harmonic Oscillator'" << '\n';
+	file << "set ylabel 'E:= Energia'" << '\n';
+	file << "set xlabel 't:=time'" << '\n';
+	file << "	p   \""+dataname2+"\"  u ($1):($2) t 'Energy', 0.5" << '\n';
+	file << "pause -1";
+	file.close();
+}
+
+void printGNU_iteration_HO(int search, string dataname3, string kind){
+	ofstream file;
+	if(kind=="EPS"){
+		file.open("time_it_HO_eps.gnu");
+		file << "set term postscript eps enhanced color" << '\n';
+		if(search==1){
+			file << "set out 'time_it_HO_S.eps'" << '\n';
+		}
+		if(search==2){
+			file << "set out 'time_it_HO_Eff.eps'" << '\n';
+		}
+	}
+	if(kind=="PNG"){
+		file.open("time_it_HO_png.gnu");
+		file << "set terminal png size 1000,700" << '\n';
+		if(search==1){
+			file << "set out 'time_it_HO_S.png'" << '\n';
+		}
+		if(search==2){
+			file << "set out 'time_it_HO_Eff.png'" << '\n';
+		}
+	}
+	file << "set grid" << '\n';
+	file << "set title 'Time of process Harmonic Oscillator'" << '\n';
+	file << "set ylabel 't:= time'" << '\n';
+	file << "set xlabel 'it:= iteration'" << '\n';
+	if(search==1){
+		file << "	p   \""+dataname3+"\"  u ($1):($2) t 'Density', \"\" u ($1):($3) t 'DDensity', \"\" u ($1):($4) t 'DDDensity', \"\" u ($1):($5) t 'AceQuantum', \"\" u ($1):($6) t 'AcePotential', \"\" u ($1):($7) t 'AceDamping', \"\" u ($1):($8) t 'Total-1', \"\" u ($1):($9) t 'Total-0'" << '\n';
+	}
+	if(search==2){
+		file << "	p   \""+dataname3+"\"  u ($1):($2) t 'Censo', \"\" u ($1):($3) t 'Density', \"\" u ($1):($4) t 'DDensity', \"\" u ($1):($5) t 'DDDensity', \"\" u ($1):($6) t 'AceQuantum', \"\" u ($1):($7) t 'AcePotential', \"\" u ($1):($8) t 'AceDamping', \"\" u ($1):($9) t 'Total-1', \"\" u ($1):($10) t 'Total-0'" << '\n';
+	}
+	file << "pause -1";
+	file.close();
+}
+
+void printGNU_Static_HO(int search, string datanamet[], string kind, double Nit[]){
+	ofstream file;
+	if(kind=="EPS"){
+		file.open("Relax_Static_HO_eps.gnu");
+		file << "set term postscript eps enhanced color" << '\n';
+		if(search==1){
+			file << "set out 'HO_static_S.eps'" << '\n';
+		}
+		if(search==2){
+			file << "set out 'HO_static_Eff.eps'" << '\n';
+		}
+	}
+	if(kind=="PNG"){
+		file.open("Relax_Static_HO_png.gnu");
+		file << "set terminal png size 1000,700" << '\n';
+		if(search==1){
+			file << "set out 'HO_static_S.png'" << '\n';
+		}
+		if(search==2){
+			file << "set out 'HO_static_Eff.png'" << '\n';
+		}
+	}
+	file << "set grid" << '\n';
+	file << "set xrange [-4.0:4.0]" << '\n';
+	file << "set title 'Harmonic Oscillator'" << '\n';
+	file << "f(x)=pi**(-0.5)*exp(-x**2)" << '\n';
+	file << "set ylabel '{/Symbol r}:= Densidad de probabilidad'" << '\n';
+	file << "set xlabel 'x:=Posicion'" << '\n';
+	file << "	p   \""+datanamet[0]+"\"  u ($1):($2) t 't="+to_string(Nit[0])+"', \""+datanamet[1]+"\"  u ($1):($2) t 't="+to_string(Nit[1])+"',\\" << '\n';
+	file << "	   \""+datanamet[2]+"\"  u ($1):($2) t 't="+to_string(Nit[2])+"', \""+datanamet[3]+"\"  u ($1):($2) t 't="+to_string(Nit[3])+"',\\" << '\n';
+	file << "	   \""+datanamet[4]+"\"  u ($1):($2) t 't="+to_string(Nit[4])+"', f(x)" << '\n';
+	file << "pause -1";
+	file.close();
+}
+
+//____________________________________________
+//____________________________________________
+//____________________________________________
+
 void printfilegnu1(double Nit[]){
 	ofstream file("RelaxGroundStateStatic.gnu");
 	file << "set term postscript eps enhanced color" << '\n';

@@ -3,7 +3,7 @@
 using namespace std;
 
 
-void SPH(string search, int Ptype, double x, int Dtype, int N, int hf, double g, double R[], double m[], double h[], double V[], double D[], double Dx[], double Dxx[], double Dxxx[], double Pxx[], double Aq[], double Agp[], double Av[], double A[], double Zh[], double Omega[]){
+void SPH(int search, int Ptype, double x, int Dtype, int N, int hf, double g, double R[], double m[], double h[], double V[], double D[], double Dx[], double Dxx[], double Dxxx[], double Pxx[], double Aq[], double Agp[], double Av[], double A[], double Zh[], double Omega[]){
 	double Na, Nb, Vc;
 	double xmin=-x, xmax=x;
 	if(Dtype==1){
@@ -38,7 +38,7 @@ void SPH(string search, int Ptype, double x, int Dtype, int N, int hf, double g,
 		int idxmin[nclass]={}, idxmax[nclass]={};
         int act[nclass]={};
 		int xf=2;
-	if(search=="standar"){
+	if(search==1){
 		Densidad0(N, m, R, h, D);
 		Densidad1( N, m, R, h, D, Dx);
 		Densidad2( N, m, R, h, D, Dx, Dxx);
@@ -48,8 +48,7 @@ void SPH(string search, int Ptype, double x, int Dtype, int N, int hf, double g,
 		AceGP(N,g, m, R, h, D,Dx, Agp);
 		AceV(N,m,h, R, D,Av);
 	}
-	if(search=="efficient"){
-//		printf("pass 0");
+	if(search==2){
 		CensoSPH(N, h_hash, xmin, R, keyS, idx, idxmin,  idxmax, act);
 		Densidad0Eff( N, nclass, xf, m, R, h, D, keyS, idx, idxmin, idxmax, act);
 		Densidad1( N, m, R, h, D, Dx);

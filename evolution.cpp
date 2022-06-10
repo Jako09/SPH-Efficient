@@ -3,6 +3,7 @@
 #include"EulerInt.h"
 #include"LeapFrog.h"
 #include"gnu.h"
+#include<time.h>
 #include<chrono>
 
 
@@ -10,9 +11,11 @@ using namespace std;
 
 int main(){
 	//We define the functions to follow the time
+
 	using std::chrono::high_resolution_clock;
     using std::chrono::duration_cast;
     using std::chrono::microseconds;
+
 	// ****Initial variables to external modification****
 	int Ptype; // Ptype:=Problem type. For this case we have -Harmonic Oscillator->"-HarmOsc", -Dynamics of HO->"HODynamic", -BEC ground states->"GSBEC", -Solitons Collition->"SolCol"
 	int Graphtype; // Graphtype:= Graph type. We have two types of graph, Animation and final results.
@@ -24,10 +27,10 @@ int main(){
 	cin >> search;
 	cout << "Which problem do you want?" << '\n';
 	cout << "Problems:" << '\n';
-	cout << "1.-Harmonic Oscillator" << '\n';
-	cout << "2.-Harmonic Oscillator Dynamics" << '\n';
+	cout << "1.-Harmonic Oscillator" << '\n'; //Give the relaxation base states for HO, in different times, and animated
+	cout << "2.-Coherent States" << '\n';
 	cout << "3.-Groud States of Bose-Einstein Condensate" << '\n';
-	cout << "4.-Soliton Collision" << '\n';
+	cout << "4.-Bright Soliton Collision" << '\n';
 	cout << "Write the number" << '\n';
 	cin >> Ptype;
 	while((Ptype!=1)&&(Ptype!=2)&&(Ptype!=3)&&(Ptype!=4)){
