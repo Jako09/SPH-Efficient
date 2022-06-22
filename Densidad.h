@@ -1,4 +1,3 @@
-
 #include"Kernel.h"
 #include"radix.h"
 #define a 5.0
@@ -22,8 +21,28 @@ void Densidad0Eff(int N,int nclass, int xf, double m[], double R[], double h[], 
 	for(int i=0; i<N; i++){
 		D[idx[i]]=0.0;
 //		printf("keyS: %d, R: %lf, idx: %d, xf %d \n", keyS[i], R[i], idx[i], xf);
+		//Int his case we need to be careful, because, we can become in a case which we need insede in both conditionals, in this case we need other implementation
+		//Another aspect than we need take in count is the feedback for the term R[i],R[i] in the kernel.
 		if(keyS[i]-xf<0 || keyS[i]+xf>nclass){
-			int diff, nxf;
+			int diff_left, diff_right, nxf_l, nxf_r;
+			diff_left=xf;
+			diff_right=xf;
+			while(keyS[i]-diff_left<0){
+				diff_left--;
+			}
+			while(keyS[i]+diff_right>nclass){
+				diff_right--;
+			}
+			nxf_l=diff_left;
+			nxf_r=diff_right;
+			for(int nclass2=keyS[i]-nxf_l;nclass2<=keyS[i]+nxf_r;nclass2++){
+				if(act[nclass2]==1){
+					for(int j=idxmin[nclass2]; j<=idxmax[nclass2];j++){
+						D[idx[i]]+=m[idx[j]]*ker(h[idx[i]], R[idx[i]], R[idx[j]]);
+					}
+				}
+			}
+/*			int diff, nxf;
 			if(keyS[i]-xf<0){
 				diff=keyS[i]-xf;
 				while(diff<0){
@@ -53,6 +72,7 @@ void Densidad0Eff(int N,int nclass, int xf, double m[], double R[], double h[], 
 					}
 				}
 			}
+*/
 		}else{
 			for(int nclass2=keyS[i]-xf;nclass2<=keyS[i]+xf;nclass2++){
 				if(act[nclass2]==1){
@@ -130,7 +150,25 @@ void Densidad1Eff(int N,int nclass, int xf, double m[], double R[], double h[], 
 		Dx[idx[i]]=0.0;
 //		printf("keyS: %d, R: %lf, idx: %d, xf %d \n", keyS[i], R[i], idx[i], xf);
 		if(keyS[i]-xf<0 || keyS[i]+xf>nclass){
-			int diff, nxf;
+			int diff_left, diff_right, nxf_l, nxf_r;
+			diff_left=xf;
+			diff_right=xf;
+			while(keyS[i]-diff_left<0){
+				diff_left--;
+			}
+			while(keyS[i]+diff_right>nclass){
+				diff_right--;
+			}
+			nxf_l=diff_left;
+			nxf_r=diff_right;
+			for(int nclass2=keyS[i]-nxf_l;nclass2<=keyS[i]+nxf_r;nclass2++){
+				if(act[nclass2]==1){
+					for(int j=idxmin[nclass2]; j<=idxmax[nclass2];j++){
+						Dx[idx[i]]+=m[idx[j]]*dker(h[idx[i]], R[idx[i]], R[idx[j]]);
+					}
+				}
+			}
+/*			int diff, nxf;
 			if(keyS[i]-xf<0){
 				diff=keyS[i]-xf;
 				while(diff<0){
@@ -160,6 +198,7 @@ void Densidad1Eff(int N,int nclass, int xf, double m[], double R[], double h[], 
 					}
 				}
 			}
+*/
 		}else{
 			for(int nclass2=keyS[i]-xf;nclass2<=keyS[i]+xf;nclass2++){
 				if(act[nclass2]==1){
@@ -240,7 +279,25 @@ void Densidad2Eff(int N,int nclass, int xf, double m[], double R[], double h[], 
 		Dxx[idx[i]]=0.0;
 //		printf("keyS: %d, R: %lf, idx: %d, xf %d \n", keyS[i], R[i], idx[i], xf);
 		if(keyS[i]-xf<0 || keyS[i]+xf>nclass){
-			int diff, nxf;
+			int diff_left, diff_right, nxf_l, nxf_r;
+			diff_left=xf;
+			diff_right=xf;
+			while(keyS[i]-diff_left<0){
+				diff_left--;
+			}
+			while(keyS[i]+diff_right>nclass){
+				diff_right--;
+			}
+			nxf_l=diff_left;
+			nxf_r=diff_right;
+			for(int nclass2=keyS[i]-nxf_l;nclass2<=keyS[i]+nxf_r;nclass2++){
+				if(act[nclass2]==1){
+					for(int j=idxmin[nclass2]; j<=idxmax[nclass2];j++){
+						Dxx[idx[i]]+=m[idx[j]]*ddker(h[idx[i]], R[idx[i]], R[idx[j]]);
+					}
+				}
+			}
+/*			int diff, nxf;
 			if(keyS[i]-xf<0){
 				diff=keyS[i]-xf;
 				while(diff<0){
@@ -270,6 +327,7 @@ void Densidad2Eff(int N,int nclass, int xf, double m[], double R[], double h[], 
 					}
 				}
 			}
+*/
 		}else{
 			for(int nclass2=keyS[i]-xf;nclass2<=keyS[i]+xf;nclass2++){
 				if(act[nclass2]==1){

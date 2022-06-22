@@ -32,17 +32,16 @@ void SPH(int search, int Ptype, double x, int Dtype, int N, int hf, double g, do
 		V[i]=0.0;
 		}
 	int keyS[N]={}, idx[N]={};
-		double h_hash=2.0*h[0];
+		double h_hash=(1.0/sqrt(2.0))*h[0];
 		int nclass=int((xmax-xmin)/h_hash);
 //		printf("pass h[0] %lf \n", h[0]);
 		int idxmin[nclass]={}, idxmax[nclass]={};
         int act[nclass]={};
-		int xf=2;
+		int xf=5;
 	if(search==1){
 		Densidad0(N, m, R, h, D);
 		Densidad1( N, m, R, h, D, Dx);
 		Densidad2( N, m, R, h, D, Dx, Dxx);
-		Densidad3(N , m, R, h,  D, Dx,Dxx,Dxxx);
 		Pressxx( N, m, R, h, D, Dx, Dxx,Dxxx, Pxx);
 		AceQ(N, m, R, h, D, Dx, Dxx, Dxxx, Pxx, Aq);
 		AceGP(N,g, m, R, h, D,Dx, Agp);
@@ -51,18 +50,20 @@ void SPH(int search, int Ptype, double x, int Dtype, int N, int hf, double g, do
 	if(search==2){
 		CensoSPH(N, h_hash, xmin, R, keyS, idx, idxmin,  idxmax, act);
 		Densidad0Eff( N, nclass, xf, m, R, h, D, keyS, idx, idxmin, idxmax, act);
-		Densidad1( N, m, R, h, D, Dx);
-		Densidad2( N, m, R, h, D, Dx, Dxx);
-		Densidad3(N , m, R, h,  D, Dx,Dxx,Dxxx);
-		Pressxx( N, m, R, h, D, Dx, Dxx,Dxxx, Pxx);
-		AceQ(N, m, R, h, D, Dx, Dxx, Dxxx, Pxx, Aq);
-		AceGP(N,g, m, R, h, D,Dx, Agp);
-		AceV(N,m,h, R, D,Av);
+		Densidad1Eff( N, nclass, xf, m, R, h, D, Dx, keyS, idx, idxmin, idxmax, act);// The Densidad1 function gives values to derivative of Density
+		Densidad2Eff( N, nclass, xf, m, R, h, D, Dx, Dxx, keyS, idx, idxmin, idxmax, act); // The Densidad2 function gives values to second derivative of Density
+		Pressxx(N, m, R, h, D, Dx, Dxx, Dxxx, Pxx); // the Pressxx function gives values to xx component of tensor pressure
+		AceQEff( N, nclass, xf, m, R, h, D, Dx, Dxx,Pxx,Aq, keyS, idx, idxmin, idxmax, act); // The AceQ function gives the values to acceleration due for quantum potential or quantum pressure
+		AceGP(N,g, m, R, h, D, Dx, Agp); // the AceGP function gives the values to nonlinear term  of acceleration with parameter g
+		//AceQAdaptative(N, m, Xc, h, D, Pxx,Omega, Aq); // The AceQAdaptative function gives values to acceleration due for quantum pressure special for h adaptive
+		//AceGPAdaptative(N,g, m, Xc, h, D,Omega, Agp); // the AceGPAdaptative function gives values to acceleration due for Non linear term g, special for h adaptive
+		AceVEff( N, nclass, xf, m, R, h, D, Av, keyS, idx, idxmin, idxmax, act); // the AceV function gives values to acceleration due for potential term
 	}
 
   
   for(int i=0;i<N;++i){
     A[i] = Aq[i] + Agp[i] + Av[i];
+//	cout << "Aq " << Aq[i] << "Agp " << Agp[i] << "Av " << Av[i] << '\n';
 //    A[i] = Aq_2[i] + Av_2[i];
 //    V[i]=A[i]/4.0; 
 //	cout << " D " << D[i] << " keyS " << keyS[i] << " idx "<<  idx[i]<< " nclass " << nclass << '\n';

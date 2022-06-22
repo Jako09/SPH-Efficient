@@ -6,6 +6,12 @@ void printGNU_Field_HO(string dataname1);
 void printGNU_Energy_HO(string dataname2);
 void printGNU_it_HO(string dataname3);
 void printGNU_S_HO(string datanamet[]);
+void namesfile(string names[]);
+
+void namesfile(string names[], string problem){
+	cout << "You'll obtain the name of the files in a datafile" << '\n';
+
+}
 
 void printGNU_Field_HO(int search, string dataname1){
 
@@ -114,9 +120,116 @@ void printGNU_Static_HO(int search, string datanamet[], string kind, double Nit[
 	file.close();
 }
 
+
 //____________________________________________
 //____________________________________________
 //____________________________________________
+
+void printGNU_time_operation(int search, string nameT, string kind){
+	ofstream file;
+	if(kind=="EPS"){
+		file.open("Time_Operation_HO_eps.gnu");
+		file << "set term postscript eps enhanced color" << '\n';
+		if(search==1){
+			file << "set out 'time_operation_S.eps'" << '\n';
+		}
+		if(search==2){
+			file << "set out 'time_operation_Eff.eps'" << '\n';
+		}
+	}
+	if(kind=="PNG"){
+		file.open("Time_Operation_HO_png.gnu");
+		file << "set terminal png size 1000,700" << '\n';
+		if(search==1){
+			file << "set out 'time_operation_S.png'" << '\n';
+		}
+		if(search==2){
+			file << "set out 'time_operation_Eff.png'" << '\n';
+		}
+	}
+	file << "set grid" << '\n';
+	file << "set xrange [-4.0:4.0]" << '\n';
+	file << "set title 'Time operation'" << '\n';
+	file << "set ylabel 't:= tiempo'" << '\n';
+	file << "set xlabel 'N:=Numero de particulas'" << '\n';
+	if(search==1){
+		file << "	p   \""+nameT+"\"  u ($1):($2) t 'Estandar'" << '\n';
+	}
+	if(search==2){
+		file << "	p   \""+nameT+"\"  u ($1):($2) t 'Eficiente'" << '\n';
+	}
+	file << "pause -1";
+	file.close();
+}
+
+void printGNU_L2(int search, string nameL2F, string nameL2NonF, string kind){
+	ofstream file;
+	if(kind=="EPS"){
+		file.open("NormL2_HO_eps.gnu");
+		file << "set term postscript eps enhanced color" << '\n';
+		if(search==1){
+			file << "set out 'NormL2_S.eps'" << '\n';
+		}
+		if(search==2){
+			file << "set out 'NormL2_Eff.eps'" << '\n';
+		}
+	}
+	if(kind=="PNG"){
+		file.open("NormL2_HO_png.gnu");
+		file << "set terminal png size 1000,700" << '\n';
+		if(search==1){
+			file << "set out 'NormL2_S.png'" << '\n';
+		}
+		if(search==2){
+			file << "set out 'NormL2_Eff.png'" << '\n';
+		}
+	}
+	file << "set grid" << '\n';
+	file << "set title 'Norma L2'" << '\n';
+	file << "set ylabel 'L2({/Symbol r}):= Error Norma L2'" << '\n';
+	file << "set xlabel 'N:=Numero de particulas'" << '\n';
+	file << "	p   \""+nameL2F+"\"  u ($1):($2) t 'Con Fronteras', \""+nameL2NonF+"\"  u ($1):($2) t 'Sin Fronteras'" << '\n';
+	file << "pause -1";
+	file.close();
+}
+
+void printGNU_field(int arrSize, int search, string nameF[], string kind){
+	ofstream file;
+	if(kind=="EPS"){
+		file.open("Field_HO_eps.gnu");
+		file << "set term postscript eps enhanced color" << '\n';
+		if(search==1){
+			file << "set out 'Field_S.eps'" << '\n';
+		}
+		if(search==2){
+			file << "set out 'Field_Eff.eps'" << '\n';
+		}
+	}
+	if(kind=="PNG"){
+		file.open("Field_HO_png.gnu");
+		file << "set terminal png size 1000,700" << '\n';
+		if(search==1){
+			file << "set out 'Field_S.png'" << '\n';
+		}
+		if(search==2){
+			file << "set out 'Field_Eff.png'" << '\n';
+		}
+	}
+	file << "set grid" << '\n';
+	file << "set title 'Convergencia'" << '\n';
+	file << "set ylabel '{/Symbol r}(r):= Densidad'" << '\n';
+	file << "set xlabel 'r:= Posicion'" << '\n';
+	file << "	p   \""+nameF[0]+"\"  u ($1):($2) t 'N=20', \\" << '\n';
+	for(int i=1; i<arrSize-1;i++){
+		file << "\""+nameF[i]+"\"  u ($1):($2) t 'N="+to_string((int)20*pow(2.0,i))+"', \\" << '\n';
+	}
+	file << "\""+nameF[arrSize-1]+"\"  u ($1):($2) t 'N="+to_string((int)20*pow(2.0,arrSize-1))+"'" << '\n';
+	file << "pause -1";
+	file.close();
+}
+//--------------------------------------
+//--------------------------------------
+//--------------------------------------
 
 void printfilegnu1(double Nit[]){
 	ofstream file("RelaxGroundStateStatic.gnu");

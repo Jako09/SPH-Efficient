@@ -113,7 +113,27 @@ void AceQEff(int N,int nclass, int xf, double m[], double R[], double h[], doubl
 		Peffi=Pxx[idx[i]]/(D[idx[i]]*D[idx[i]]);
 		A[idx[i]]=0.0;//		printf("keyS: %d, R: %lf, idx: %d, xf %d \n", keyS[i], R[i], idx[i], xf);
 		if(keyS[i]-xf<0 || keyS[i]+xf>nclass){
-			int diff, nxf;
+			int diff_left, diff_right, nxf_l, nxf_r;
+			diff_left=xf;
+			diff_right=xf;
+			while(keyS[i]-diff_left<0){
+				diff_left--;
+			}
+			while(keyS[i]+diff_right>nclass){
+				diff_right--;
+			}
+			nxf_l=diff_left;
+			nxf_r=diff_right;
+			for(int nclass2=keyS[i]-nxf_l;nclass2<=keyS[i]+nxf_r;nclass2++){
+				if(act[nclass2]==1){
+					for(int j=idxmin[nclass2]; j<=idxmax[nclass2];j++){
+						Peffj=0.0;
+						Peffj=Pxx[idx[j]]/(D[idx[j]]*D[idx[j]]);
+						A[idx[i]]=A[idx[i]]-m[idx[j]]*(Peffi+Peffj)*dker(h[idx[i]], R[idx[i]], R[idx[j]]);
+					}
+				}
+			}
+/*			int diff, nxf;
 			if(keyS[i]-xf<0){
 				diff=keyS[i]-xf;
 				while(diff<0){
@@ -146,6 +166,7 @@ void AceQEff(int N,int nclass, int xf, double m[], double R[], double h[], doubl
 					}
 				}
 			}
+*/
 		}else{
 			for(int nclass2=keyS[i]-xf;nclass2<=keyS[i]+xf;nclass2++){
 				if(act[nclass2]==1){
@@ -270,7 +291,26 @@ void AceVEff(int N,int nclass, int xf, double m[], double R[], double h[], doubl
 	for(int i=0; i<N; i++){
 		A[idx[i]]=0.0;
 		if(keyS[i]-xf<0 || keyS[i]+xf>nclass){
-			int diff, nxf;
+			int diff_left, diff_right, nxf_l, nxf_r;
+			diff_left=xf;
+			diff_right=xf;
+			while(keyS[i]-diff_left<0){
+				diff_left--;
+			}
+			while(keyS[i]+diff_right>nclass){
+				diff_right--;
+			}
+			nxf_l=diff_left;
+			nxf_r=diff_right;
+			for(int nclass2=keyS[i]-nxf_l;nclass2<=keyS[i]+nxf_r;nclass2++){
+				if(act[nclass2]==1){
+					for(int j=idxmin[nclass2]; j<=idxmax[nclass2];j++){
+						Veffj=0.5*R[idx[j]]*R[idx[j]];
+						A[idx[i]]=A[idx[i]]-m[idx[j]]*(Veffj)*dker(h[idx[i]], R[idx[i]], R[idx[j]])/D[idx[j]];
+					}
+				}
+			}
+/*			int diff, nxf;
 			if(keyS[i]-xf<0){
 				diff=keyS[i]-xf;
 				while(diff<0){
@@ -302,6 +342,7 @@ void AceVEff(int N,int nclass, int xf, double m[], double R[], double h[], doubl
 					}
 				}
 			}
+*/
 		}else{
 			for(int nclass2=keyS[i]-xf;nclass2<=keyS[i]+xf;nclass2++){
 				if(act[nclass2]==1){
@@ -320,7 +361,25 @@ void AceDampEff(int N,int nclass, int xf, double m[], double R[], double h[], do
 	for(int i=0; i<N; i++){
 		A[idx[i]]=0.0;
 		if(keyS[i]-xf<0 || keyS[i]+xf>nclass){
-			int diff, nxf;
+			int diff_left, diff_right, nxf_l, nxf_r;
+			diff_left=xf;
+			diff_right=xf;
+			while(keyS[i]-diff_left<0){
+				diff_left--;
+			}
+			while(keyS[i]+diff_right>nclass){
+				diff_right--;
+			}
+			nxf_l=diff_left;
+			nxf_r=diff_right;
+			for(int nclass2=keyS[i]-nxf_l;nclass2<=keyS[i]+nxf_r;nclass2++){
+				if(act[nclass2]==1){
+					for(int j=idxmin[nclass2]; j<=idxmax[nclass2];j++){
+						A[idx[i]]=A[idx[i]]-DV*m[idx[j]]*Vc[idx[j]]*ker(h[idx[i]], R[idx[i]], R[idx[j]])/D[idx[j]];
+					}
+				}
+			}
+/*			int diff, nxf;
 			if(keyS[i]-xf<0){
 				diff=keyS[i]-xf;
 				while(diff<0){
@@ -350,6 +409,7 @@ void AceDampEff(int N,int nclass, int xf, double m[], double R[], double h[], do
 					}
 				}
 			}
+*/
 		}else{
 			for(int nclass2=keyS[i]-xf;nclass2<=keyS[i]+xf;nclass2++){
 				if(act[nclass2]==1){

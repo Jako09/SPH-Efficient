@@ -1,16 +1,23 @@
-#include<bits/stdc++.h>
+//#include"Densidad.h"
 
 using namespace std;
 
-double L2(int Ptype, int N, double R[], double D[]){
+double L2(int Ptype,int frontiers, int N, double R[], double D[]){
 	double z;
 	for(int i=0; i<N; ++i){
-//		if(i>0.25*N && i<0.75*N){
-		double e=D[i]-DA(Ptype, R[i]);
-		z+=e*e;
-//		}
+		if(frontiers==1){
+			double e=D[i]-DA(Ptype, R[i]);
+			z+=e*e;
+		}
+		if(frontiers==2){
+			if(R[i]>-3.0/sqrt(2.0) && R[i]<3.0/sqrt(2.0)){
+				double e=D[i]-DA(Ptype, R[i]);
+				z+=e*e;
+			}
+		}
 	}
 	return sqrt(z);
+
 }
 /*
 void errorDensidad(int Ptype, int Stype, int Gtype, int N){
